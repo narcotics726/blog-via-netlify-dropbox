@@ -4,6 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+nohup.out
 
 # Runtime data
 pids
@@ -59,3 +60,15 @@ typings/
 
 # next.js build output
 .next
+
+#hexo build output
+db.json
+public/
+.deploy*/
+
+#netlify functions
+functions/dist/
+
+#ignore all files in _posts since we will put them into dropbox
+source/_posts/*
+!.keep
