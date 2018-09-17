@@ -72,3 +72,5 @@ functions/dist/
 #ignore all files in _posts since we will put them into dropbox
 source/_posts/*
 !.keep
+#hexo need at least one md to generate a valid website?
+!source/_posts/hello-world.md
