@@ -74,3 +74,4 @@ source/_posts/*
 !.keep
 #hexo need at least one md to generate a valid website?
 !source/_posts/hello-world.md
+.bin/dist
