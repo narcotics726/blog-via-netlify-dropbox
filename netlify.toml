@@ -1,7 +1,7 @@
 [build]
   functions = "./functions/dist"
   #fetch files from dropbox before build
-  #command = "node_modules/.bin/tsc -p ./.bin/tsconfig.json && node .bin/dist/index.js && hexo generate && netlify-lambda build ./functions"
-  command = "hexo generate && netlify-lambda build ./functions"
+  command = "node_modules/.bin/tsc -p ./.bin/tsconfig.json && node .bin/dist/index.js && hexo generate && netlify-lambda build ./functions"
+  #command = "hexo generate && netlify-lambda build ./functions"
 [context.production]
-  environment = { DROPBOX_APP_KEY = "APP_KEY", DROPBOX_APP_SECRET = "APP_SECRET", NODE_ENV = "10" }
+  environment = { NODE_VERSION = "10" }
