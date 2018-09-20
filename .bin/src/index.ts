@@ -15,7 +15,8 @@ const extractZip = function (zipPath: string) {
         .filter(entry =>
             !entry.isDirectory &&
             entry.name.toLowerCase().endsWith('md') &&
-            entry.entryName.startsWith('blogs/')
+            entry.entryName.startsWith('blogs/') &&
+            !entry.entryName.includes('draft')
         )
         .map(entry => {
             return fsp.writeFile(path.resolve('./source/_posts', entry.name.toLowerCase()), entry.getData());
