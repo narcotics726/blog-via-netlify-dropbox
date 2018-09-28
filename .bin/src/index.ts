@@ -4,7 +4,6 @@ import needle from 'needle';
 import AdmZip from 'adm-zip';
 import * as path from 'path';
 
-
 const fsp = {
     writeFile: util.promisify(fs.writeFile)
 };
@@ -14,13 +13,28 @@ const extractZip = function (zipPath: string) {
     const tasks = zip.getEntries()
         .filter(entry =>
             !entry.isDirectory &&
-            entry.name.toLowerCase().endsWith('md') &&
+            (entry.name.toLowerCase().endsWith('md') || entry.entryName.startsWith('blogs/images')) &&
             entry.entryName.startsWith('blogs/') &&
-            !entry.entryName.includes('draft')
-        )
-        .map(entry => {
-            return fsp.writeFile(path.resolve('./source/_posts', entry.name.toLowerCase()), entry.getData());
-        });
+            !entry.entryName.startsWith('blogs/draft')
+        ).reduce((groups: AdmZip.IZipEntry[][], entry: AdmZip.IZipEntry) => {
+            const key = entry.name.toLowerCase().endsWith('md') ? 0 : 1;
+            groups[key].push(entry);
+            return groups;
+        }, [[], []])
+        .map((group: AdmZip.IZipEntry[], index: number) => {
+            let rootDir = './source/_posts';
+            if (index === 1) {
+                rootDir = './source/images';
+            }
+            return group.map(entry =>
+                fsp.writeFile(
+                    path.resolve(rootDir, entry.name.toLowerCase()),
+                    entry.getData()
+                )
+            );
+        }).reduce((arr: Promise<void>[], group: Promise<void>[]) => {
+            return arr.concat(group);
+        }, []);
     return Promise.all(tasks);
 };
 
@@ -29,7 +43,7 @@ const downloadZip = function () {
     return needle(
         'post',
         'https://content.dropboxapi.com/2/files/download_zip',
-        null,
+        {},
         {
             headers: {
                 'Authorization': `Bearer ${process.env['DROPBOX_TOKEN']}`,
