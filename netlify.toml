@@ -5,3 +5,7 @@
   #command = "hexo generate && netlify-lambda build ./functions"
 [context.production]
   environment = { NODE_VERSION = "8" }
+[[redirects]]
+  from = "/:slug/images/:img"
+  to = "/images/:img"
+  force = true

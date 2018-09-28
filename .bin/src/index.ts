@@ -13,6 +13,9 @@ const ZIP_FILE_PATH = './blogs.zip';
 
 const extractZip = function () {
     const zip = new AdmZip(ZIP_FILE_PATH);
+    if (!fs.existsSync('./source/images')) {
+        fs.mkdirSync('./source/images');
+    }
     const tasks = zip.getEntries()
         .filter(entry =>
             !entry.isDirectory &&
