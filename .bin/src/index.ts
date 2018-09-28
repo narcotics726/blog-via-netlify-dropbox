@@ -5,11 +5,14 @@ import AdmZip from 'adm-zip';
 import * as path from 'path';
 
 const fsp = {
-    writeFile: util.promisify(fs.writeFile)
+    writeFile: util.promisify(fs.writeFile),
+    unlink: util.promisify(fs.unlink)
 };
 
-const extractZip = function (zipPath: string) {
-    const zip = new AdmZip(zipPath);
+const ZIP_FILE_PATH = './blogs.zip';
+
+const extractZip = function () {
+    const zip = new AdmZip(ZIP_FILE_PATH);
     const tasks = zip.getEntries()
         .filter(entry =>
             !entry.isDirectory &&
@@ -35,11 +38,10 @@ const extractZip = function (zipPath: string) {
         }).reduce((arr: Promise<void>[], group: Promise<void>[]) => {
             return arr.concat(group);
         }, []);
-    return Promise.all(tasks);
+    return Promise.all(tasks).then(() => tasks.length);
 };
 
 const downloadZip = function () {
-    console.log('token: ' + process.env['DROPBOX_TOKEN']);
     return needle(
         'post',
         'https://content.dropboxapi.com/2/files/download_zip',
@@ -57,14 +59,20 @@ const downloadZip = function () {
             throw new Error(`failed to download zip: ${res.body}`);
         }
 
-        return fsp.writeFile('./t.zip', res.body);
-    }).then(() => {
-        return './t.zip';
+        return fsp.writeFile(ZIP_FILE_PATH, res.body);
     });
 };
 
+const removePlaceHolderBlog = function (blogFileCount: number) {
+    if (blogFileCount <= 0) {
+        return Promise.resolve();
+    }
+
+    return fsp.unlink('./source/_posts/hello-world.md').catch(err => console.log(err));
+};
+
 const func = async function () {
-    return downloadZip().then(extractZip);
+    return downloadZip().then(extractZip).then(removePlaceHolderBlog);
 };
 
 func().then(() => process.exit(0)).catch(err => {
