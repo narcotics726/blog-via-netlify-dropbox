@@ -51,7 +51,8 @@ const downloadZip = function () {
                 'Authorization': `Bearer ${process.env['DROPBOX_TOKEN']}`,
                 'Dropbox-API-Arg': JSON.stringify({
                     'path': '/blogs'
-                })
+                }),
+                'Content-Type': 'application/octet-stream; charset=utf-8'
             }
         }
     ).then(res => {
