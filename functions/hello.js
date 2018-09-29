@@ -11,13 +11,6 @@ exports.handler = function (event, context, callback) {
             return callback(err, {statusCode: 500});
         }
 
-        // fs.writeFile('./source/_posts/test.md', '#Test Blog From Function', (err) => {
-        //     if (err) {
-        //         return callback(err);
-        //     }
-
-        //     childProcess.execSync('./node_modules/.bin/hexo generate');
-
             return callback(null, { statusCode: 200, body: JSON.stringify(files) });
         // })
 
