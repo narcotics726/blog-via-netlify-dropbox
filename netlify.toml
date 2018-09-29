@@ -1,7 +1,7 @@
 [build]
   functions = "./functions/dist"
   #fetch files from dropbox before build
-  command = "node_modules/bin/tsc -p ./bin/tsconfig.json && node bin/dist/index.js && hexo generate && netlify-lambda build ./functions"
+  command = "node_modules/.bin/tsc -p ./bin/tsconfig.json && node ./bin/dist/index.js && hexo generate && netlify-lambda build ./functions"
   #command = "hexo generate && netlify-lambda build ./functions"
 [context.production]
   environment = { NODE_VERSION = "8" }
