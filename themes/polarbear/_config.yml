@@ -66,9 +66,9 @@ gitalk:
   enable: true
   clientID: ab4cc1f27ce3f1bf45d1
   clientSecret: d637700aac7bd69f45588d9fc4505f6dc52dbb0c
-  repo: https://github.com/narcotics726/repo-for-blog-comments-via-gitalk.git
-  owner: narcotics726@gmail.com
-  admin: narcotics726@gmail.com
+  repo: repo-for-blog-comments-via-gitalk
+  owner: narcotics726
+  admin: narcotics726
   pagerDirection: first
 
 
